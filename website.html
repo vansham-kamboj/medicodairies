@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Notebook — Nursing &amp; Medical Notes, Made By Students For Students</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF6EC;
+    --paper-deep: #F2ECDD;
+    --ink: #23291F;
+    --ink-soft: #565B4E;
+    --teal: #0F766E;
+    --teal-deep: #0B5A54;
+    --amber: #C0862E;
+    --amber-soft: #EAD9B8;
+    --sage: #E3EBE1;
+    --line: #D8D0BC;
+    --radius: 3px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(15,118,110,0.04), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(192,134,46,0.05), transparent 55%);
+  }
+  /* paper grain */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.35;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:500; color:var(--ink); }
+  .hand{ font-family:'Caveat', cursive; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+
+  /* ===== spine ===== */
+  .spine{
+    position:fixed; top:0; left:0; bottom:0; width:34px;
+    background: linear-gradient(180deg, var(--teal-deep), var(--teal));
+    z-index:5;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .spine::after{
+    content:"";
+    position:absolute; left:16px; top:0; bottom:0; width:1px;
+    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.35) 0 6px, transparent 6px 16px);
+  }
+  @media(max-width:780px){ .spine{ display:none; } body{padding-left:0;} }
+  body{ padding-left:34px; }
+  @media(max-width:780px){ body{ padding-left:0; } }
+
+  /* ===== nav ===== */
+  header.top{
+    position:sticky; top:0; z-index:4;
+    background:rgba(250,246,236,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  header.top.scrolled{ box-shadow:0 6px 18px rgba(15,54,50,0.08); }
+  .navrow{
+    max-width:900px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem; letter-spacing:0.2px; }
+  .brand span{ color:var(--teal); }
+  .navcta{
+    background:var(--teal); color:#fff; padding:9px 18px; border-radius:var(--radius);
+    font-weight:600; font-size:0.88rem; border:1px solid var(--teal-deep);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .navcta:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(15,54,50,0.18); }
+  .navcta:active{ transform:translateY(0); }
+
+  /* ===== hero ===== */
+  .hero{ padding:90px 0 70px; opacity:0; transform:translateY(14px); animation:heroIn 0.9s ease forwards 0.1s; }
+  @keyframes heroIn{ to{ opacity:1; transform:translateY(0); } }
+  .eyebrow{
+    display:inline-block; font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal-deep); font-weight:600; margin-bottom:22px;
+    border-bottom:2px solid var(--amber); padding-bottom:4px;
+  }
+  .hero h1{
+    font-size:3.1rem; line-height:1.12; max-width:720px; letter-spacing:-0.5px;
+  }
+  .hero h1 em{ font-style:italic; color:var(--teal-deep); position:relative; }
+  .hero h1 em svg{
+    position:absolute; left:-2%; bottom:-14px; width:104%; height:16px; overflow:visible;
+  }
+  .hero h1 em svg path{
+    fill:none; stroke:var(--amber); stroke-width:3; stroke-linecap:round;
+    stroke-dasharray:340; stroke-dashoffset:340;
+    animation:drawUnderline 1s ease forwards 1.1s;
+  }
+  @keyframes drawUnderline{ to{ stroke-dashoffset:0; } }
+  .hero .lede{
+    margin-top:24px; font-size:1.15rem; color:var(--ink-soft); max-width:560px; line-height:1.65;
+  }
+  .hero-ctas{ margin-top:36px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  .btn-primary{
+    background:var(--teal); color:#fff; padding:14px 26px; border-radius:var(--radius);
+    font-weight:600; font-size:0.95rem; display:inline-block; border:1px solid var(--teal-deep);
+    box-shadow:0 2px 0 var(--teal-deep);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 5px 0 var(--teal-deep); }
+  .btn-primary:active{ transform:translateY(1px); box-shadow:0 1px 0 var(--teal-deep); }
+  .btn-ghost{
+    color:var(--ink); font-weight:600; font-size:0.95rem; border-bottom:1px solid var(--ink);
+    padding-bottom:2px; transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-ghost:hover{ color:var(--teal-deep); border-color:var(--teal-deep); }
+  .underline-doodle{
+    position:relative; white-space:nowrap;
+  }
+  .underline-doodle svg{ position:absolute; left:0; bottom:-8px; width:100%; height:10px; }
+
+  /* ===== chapter shared ===== */
+  .chapter{ padding:64px 0; border-top:1px solid var(--line); position:relative; }
+  .chapter-tag{
+    font-family:'Caveat', cursive; font-size:1.4rem; color:var(--amber); margin-bottom:6px; display:block;
+  }
+  .chapter h2{ font-size:2rem; max-width:640px; margin-bottom:18px; }
+  .chapter .intro{ color:var(--ink-soft); max-width:600px; font-size:1.02rem; margin-bottom:34px; }
+  .chapter.tint{ background:var(--sage); margin:0 -1000px; padding-left:1000px; padding-right:1000px; }
+  .chapter.tint{
+    background-image:
+      radial-gradient(circle, rgba(15,118,110,0.10) 1px, transparent 1.4px),
+      linear-gradient(var(--sage), var(--sage));
+    background-size: 22px 22px, 100% 100%;
+  }
+
+  /* ===== ECG pulse divider ===== */
+  .ecg-divider{ width:100%; height:36px; margin-top:-1px; position:relative; overflow:hidden; }
+  .ecg-divider svg{ width:100%; height:100%; display:block; }
+  .ecg-divider path{
+    fill:none; stroke:var(--teal); stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:900; stroke-dashoffset:900; transition:stroke-dashoffset 1.4s ease;
+  }
+  .ecg-divider.in-view path{ stroke-dashoffset:0; }
+
+  /* ===== scroll reveal ===== */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ opacity:0; transform:translateY(16px); transition:opacity 0.55s ease, transform 0.55s ease; }
+  .reveal-stagger.in-view > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.in-view > *:nth-child(1){ transition-delay:0.02s; }
+  .reveal-stagger.in-view > *:nth-child(2){ transition-delay:0.09s; }
+  .reveal-stagger.in-view > *:nth-child(3){ transition-delay:0.16s; }
+  .reveal-stagger.in-view > *:nth-child(4){ transition-delay:0.23s; }
+  .reveal-stagger.in-view > *:nth-child(5){ transition-delay:0.30s; }
+  .reveal-stagger.in-view > *:nth-child(6){ transition-delay:0.37s; }
+
+  /* ===== story ===== */
+  .story-grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:start; }
+  @media(max-width:780px){ .story-grid{ grid-template-columns:1fr; } }
+  .story p{ margin-bottom:16px; color:var(--ink); font-size:1.02rem; }
+  .story p:first-of-type{ font-size:1.12rem; }
+  .pull{
+    font-family:'Fraunces', serif; font-style:italic; font-size:1.3rem; color:var(--teal-deep);
+    border-left:3px solid var(--amber); padding-left:20px; margin:26px 0;
+  }
+  .stat-card{
+    background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px; margin-bottom:16px; transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stat-card:hover{ transform:translateY(-3px); box-shadow:0 8px 20px rgba(15,54,50,0.10); }
+  .stat-card .num{ font-family:'Fraunces', serif; font-size:2.1rem; color:var(--teal-deep); }
+  .stat-card .lab{ font-size:0.85rem; color:var(--ink-soft); margin-top:2px; }
+
+  /* ===== free resources ===== */
+  .res-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+  @media(max-width:780px){ .res-grid{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:520px){ .res-grid{ grid-template-columns:1fr; } }
+  .res-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; transition:transform 0.18s ease, box-shadow 0.18s ease;
+    position:relative; overflow:hidden;
+  }
+  .res-card::after{
+    content:""; position:absolute; top:0; right:0; width:0; height:0;
+    border-style:solid; border-width:0 0 0 0;
+    border-color:transparent var(--paper-deep) transparent transparent;
+    box-shadow:-2px 2px 4px rgba(0,0,0,0.08);
+    transition: border-width 0.2s ease;
+  }
+  .res-card:hover{ transform:translateY(-4px); box-shadow:0 10px 24px rgba(15,54,50,0.10); }
+  .res-card:hover::after{ border-width:0 0 22px 22px; }
+  .res-tag{
+    font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--teal-deep);
+    font-weight:700; margin-bottom:10px; display:block;
+  }
+  .res-card h3{ font-size:1.05rem; margin-bottom:8px; }
+  .res-card p{ font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px; }
+  .res-card a{ font-size:0.85rem; font-weight:600; color:var(--teal); border-bottom:1px solid var(--teal); }
+
+  /* ===== paid group ===== */
+  .paid-panel{
+    display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center;
+  }
+  @media(max-width:780px){ .paid-panel{ grid-template-columns:1fr; } }
+  .mock{
+    background:var(--paper); border:1px solid var(--line); border-radius:6px; padding:22px;
+    position:relative; box-shadow:0 10px 30px rgba(15,54,50,0.09);
+    transition: transform 0.3s ease;
+  }
+  .mock:hover{ transform:rotate(-1deg) translateY(-2px); }
+  .mock::before{
+    content:"PREVIEW"; position:absolute; top:14px; right:14px; font-size:0.65rem;
+    background:var(--amber); color:#fff; padding:3px 8px; border-radius:2px; letter-spacing:0.06em;
+  }
+  .mock .line{ height:9px; background:var(--line); border-radius:2px; margin-bottom:11px; filter:blur(1.5px); }
+  .mock .line.short{ width:60%; }
+  .mock .line.teal{ background:var(--teal); opacity:0.35; width:40%; }
+  .feature-list{ list-style:none; margin:22px 0; }
+  .feature-list li{
+    display:flex; gap:10px; margin-bottom:13px; font-size:0.98rem; align-items:flex-start;
+  }
+  .feature-list li::before{
+    content:"✓"; color:var(--teal); font-weight:700; flex-shrink:0;
+  }
+  .price-row{ display:flex; gap:14px; align-items:baseline; margin:22px 0; }
+  .price-row .amt{ font-family:'Fraunces', serif; font-size:2rem; color:var(--teal-deep); }
+  .price-row .per{ color:var(--ink-soft); font-size:0.9rem; }
+
+  /* ===== affiliate ===== */
+  .aff-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media(max-width:780px){ .aff-grid{ grid-template-columns:1fr; } }
+  .aff-card{
+    border:1px solid var(--line); border-radius:var(--radius); padding:22px; background:var(--paper);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .aff-card:hover{ transform:translateY(-4px); box-shadow:0 10px 22px rgba(15,54,50,0.09); border-color:var(--teal); }
+  .aff-card .kind{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--amber); font-weight:700; }
+  .aff-card h3{ font-size:1.05rem; margin:8px 0 10px; }
+  .aff-card p{ font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px; }
+  .aff-card a{ font-size:0.85rem; font-weight:600; color:var(--teal); }
+
+  /* ===== policies ===== */
+  .policy-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:780px){ .policy-grid{ grid-template-columns:1fr; } }
+  .policy-item{ padding:20px 0; border-bottom:1px solid var(--line); }
+  .policy-item h3{ font-size:1rem; margin-bottom:6px; }
+  .policy-item p{ font-size:0.92rem; color:var(--ink-soft); }
+
+  /* ===== final cta ===== */
+  .final{
+    text-align:center; padding:90px 0 100px;
+  }
+  .final h2{ font-size:2.3rem; max-width:600px; margin:0 auto 16px; }
+  .final .intro{ margin:0 auto 34px; }
+  .final .btn-primary{ font-size:1.05rem; padding:16px 34px; }
+
+  footer{
+    border-top:1px solid var(--line); padding:34px 0; text-align:center;
+    color:var(--ink-soft); font-size:0.85rem;
+  }
+  footer .hand{ font-size:1.1rem; color:var(--teal-deep); display:block; margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<div class="spine" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="navrow">
+    <div class="brand">The <span>Notebook</span></div>
+    <a href="#join" class="navcta">Join the group</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">A notebook for every allied health student</span>
+    <h1>Notes made by someone who's <em>still learning<svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M4,10 Q60,2 120,9 T296,7"/></svg></em> too.</h1>
+    <p class="lede">Free study notes, honest guidance, and a community for Nursing, GNM, ANM, B.Pharma, OT and Lab Tech students — plus focused prep for NORCET, AIIMS and other entrance exams. Because the next patient deserves a team that actually knows their stuff.</p>
+    <div class="hero-ctas">
+      <a href="#free" class="btn-primary">Start with the free notes</a>
+      <a href="#paid" class="btn-ghost">See what's inside the group</a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="story">
+  <div class="wrap">
+    <span class="chapter-tag reveal">Chapter One</span>
+    <h2 class="reveal">Why this exists</h2>
+    <div class="story-grid">
+      <div class="story reveal">
+        <p>This page didn't start as a business. It started because I kept getting the same message, over and over — <em>"Do you have notes for this?"</em> <em>"I don't understand this topic."</em> <em>"I have NORCET next month and I'm panicking."</em></p>
+        <p>Every field we cover — Nursing, GNM, ANM, B.Pharma, OT, Lab Tech — leads to the same place: someone's bedside, someone's medication, someone's sample, someone's operation. These courses don't just test what you've memorised. They decide who's ready when it actually matters. That felt like something worth taking seriously.</p>
+        <div class="pull">So I started writing the notes I wished someone had written for me — clear, visual, no unnecessary jargon, for whichever course you're in.</div>
+        <p>Somewhere along the way, thousands of you started reading them — from every corner of allied health, not just one. This still isn't a note-selling page to me. It's a community of people from different courses, all trying to become genuinely ready for the job — and helping each other get there, one topic at a time.</p>
+      </div>
+      <div class="reveal-stagger">
+        <div class="stat-card"><div class="num" data-count="25000" data-suffix="+">0</div><div class="lab">students following along</div></div>
+        <div class="stat-card"><div class="num" data-count="11" data-suffix="M+">0</div><div class="lab">views on notes &amp; explainers</div></div>
+        <div class="stat-card"><div class="num" data-count="100" data-suffix="%">0</div><div class="lab">notes written for real exams, not generic content</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ecg-divider"><svg viewBox="0 0 800 36" preserveAspectRatio="none"><path d="M0,18 L260,18 L285,18 L300,3 L320,33 L340,10 L355,18 L800,18"/></svg></div>
+
+<section class="chapter tint" id="free">
+  <div class="wrap">
+    <span class="chapter-tag reveal">Chapter Two</span>
+    <h2 class="reveal">Start here — completely free</h2>
+    <p class="intro reveal">Before you spend a single rupee, take what's free. These are full notes, not teasers — you shouldn't have to pay just to find out if this is useful to you.</p>
+    <div class="res-grid reveal-stagger">
+      <div class="res-card"><span class="res-tag">Nursing / GNM / ANM</span><h3>Cardiac Cycle, explained visually</h3><p>The full cycle broken into stages you can actually picture, not just memorise.</p><a href="#">View note →</a></div>
+      <div class="res-card"><span class="res-tag">Nursing / GNM</span><h3>Types of Shock</h3><p>Every category, side by side, with the signs that tell them apart.</p><a href="#">View note →</a></div>
+      <div class="res-card"><span class="res-tag">B.Pharma</span><h3>High-Alert Medications</h3><p>The drugs that show up on every exam and every ward.</p><a href="#">View note →</a></div>
+      <div class="res-card"><span class="res-tag">OT Technology</span><h3>Sterilisation &amp; OT Protocols</h3><p>The sequence examiners actually ask about, step by step.</p><a href="#">View note →</a></div>
+      <div class="res-card"><span class="res-tag">Lab Technology</span><h3>Common Lab Values Quick Reference</h3><p>Normal ranges and red flags, on one page you'll keep coming back to.</p><a href="#">View note →</a></div>
+      <div class="res-card"><span class="res-tag">Exam Prep</span><h3>NORCET &amp; AIIMS Practice Set</h3><p>Twenty questions in the real exam format, with reasoning for each answer.</p><a href="#">View note →</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="ecg-divider"><svg viewBox="0 0 800 36" preserveAspectRatio="none"><path d="M0,18 L260,18 L285,18 L300,3 L320,33 L340,10 L355,18 L800,18"/></svg></div>
+
+<section class="chapter" id="paid">
+  <div class="wrap">
+    <span class="chapter-tag reveal">Chapter Three</span>
+    <h2 class="reveal">For the ones who want more</h2>
+    <p class="intro reveal">The free notes are real, but they're the surface. Inside the paid group is everything else.</p>
+    <div class="paid-panel reveal">
+      <div>
+        <ul class="feature-list">
+          <li>New notes added every week, organised by course — Nursing, GNM, ANM, B.Pharma, OT, Lab Tech</li>
+          <li>Dedicated NORCET &amp; AIIMS exam-prep tracks with past-pattern practice sets</li>
+          <li>Direct access to ask your own questions and actually get answers</li>
+          <li>Early access to new notes before they go public</li>
+          <li>A private group of people from every course, studying alongside you</li>
+        </ul>
+        <div class="price-row"><span class="amt">₹299</span><span class="per">/ month, or ₹999 for lifetime access</span></div>
+        <a href="#join" class="btn-primary">Join on Telegram</a>
+      </div>
+      <div class="mock">
+        <div class="line" style="width:45%; background:var(--amber); opacity:0.5;"></div>
+        <div class="line" style="height:14px; width:80%;"></div>
+        <div class="line short"></div>
+        <div class="line teal"></div>
+        <div class="line"></div>
+        <div class="line short"></div>
+        <div class="line" style="width:70%;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ecg-divider"><svg viewBox="0 0 800 36" preserveAspectRatio="none"><path d="M0,18 L260,18 L285,18 L300,3 L320,33 L340,10 L355,18 L800,18"/></svg></div>
+
+<section class="chapter tint" id="tools">
+  <div class="wrap">
+    <span class="chapter-tag reveal">Chapter Four</span>
+    <h2 class="reveal">Tools we actually use</h2>
+    <p class="intro reveal">We only recommend what we'd tell a friend to buy. No random ads, nothing we haven't used ourselves.</p>
+    <div class="aff-grid reveal-stagger">
+      <div class="aff-card"><span class="kind">Reference</span><h3>Pocket Drug &amp; Lab Values Guide</h3><p>The one we still carry on clinical and lab days, years in.</p><a href="#">See why we recommend it →</a></div>
+      <div class="aff-card"><span class="kind">Equipment</span><h3>Littmann Classic III Stethoscope</h3><p>Durable enough for daily use through an entire diploma or degree.</p><a href="#">See why we recommend it →</a></div>
+      <div class="aff-card"><span class="kind">App</span><h3>NORCET / AIIMS Question Bank</h3><p>The practice question app most of our group already swears by.</p><a href="#">See why we recommend it →</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="ecg-divider"><svg viewBox="0 0 800 36" preserveAspectRatio="none"><path d="M0,18 L260,18 L285,18 L300,3 L320,33 L340,10 L355,18 L800,18"/></svg></div>
+
+<section class="chapter" id="how">
+  <div class="wrap">
+    <span class="chapter-tag reveal">Chapter Five</span>
+    <h2 class="reveal">The fine print, made simple</h2>
+    <div class="policy-grid reveal-stagger">
+      <div class="policy-item"><h3>How you join</h3><p>Pick your plan above, then message us on Telegram. We'll confirm your payment and add you to the private group directly.</p></div>
+      <div class="policy-item"><h3>How fast you're added</h3><p>Usually within a few hours, always within 24. We're a small team replying to every message ourselves — no bots.</p></div>
+      <div class="policy-item"><h3>Refunds</h3><p>If you join and it isn't for you, message us within 48 hours for a full refund, no questions asked.</p></div>
+      <div class="policy-item"><h3>What we'll never do</h3><p>We won't spam you, sell your number, or go silent after you've paid. If something's wrong, tell us — we'll fix it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="final reveal" id="join">
+  <div class="wrap">
+    <h2>Ready to actually understand this stuff?</h2>
+    <p class="intro">Join thousands of Nursing, GNM, ANM, B.Pharma, OT and Lab Tech students already learning together — starting free, whenever you're ready.</p>
+    <a href="#" class="btn-primary">Join the Telegram Group</a>
+    <div style="margin-top:18px;"><a href="#free" class="btn-ghost">Or start with the free notes first</a></div>
+  </div>
+</section>
+
+<footer>
+  <span class="hand">Written by students, for students.</span>
+  The Notebook — built one note at a time.
+</footer>
+
+<script>
+  // Navbar shadow on scroll
+  const topbar = document.querySelector('header.top');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  // Scroll-reveal + ECG draw
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.18 });
+
+  document.querySelectorAll('.reveal, .reveal-stagger, .ecg-divider').forEach(el => io.observe(el));
+
+  // Count-up stats
+  const countIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.count, 10);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1100;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = Math.round(target * eased);
+        el.textContent = val.toLocaleString('en-IN') + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      countIo.unobserve(el);
+    });
+  }, { threshold: 0.4 });
+
+  document.querySelectorAll('.num[data-count]').forEach(el => countIo.observe(el));
+</script>
+</body>
+</html>
