@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes Library | Medico Diaries</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #FAF6EC;
+    --paper-deep: #F2ECDD;
+    --ink: #23291F;
+    --ink-soft: #565B4E;
+    --teal: #0F766E;
+    --teal-deep: #0B5A54;
+    --amber: #C0862E;
+    --amber-soft: #EAD9B8;
+    --sage: #E3EBE1;
+    --line: #D8D0BC;
+    --radius: 3px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; overflow-x:hidden; }
+  body{
+    overflow-x:hidden;
+    background: var(--paper);
+    color: var(--ink);
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    padding-left:34px;
+  }
+  @media(max-width:780px){ body{ padding-left:0; } }
+  h1,h2,h3{ font-family:'Fraunces', serif; font-weight:500; color:var(--ink); }
+  .hand{ font-family:'Caveat', cursive; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; position:relative; z-index:1; }
+  @media(max-width:600px){ .wrap{ padding:0 20px; } }
+
+  .spine{
+    position:fixed; top:0; left:0; bottom:0; width:34px;
+    background: linear-gradient(180deg, var(--teal-deep), var(--teal));
+    z-index:5;
+  }
+  .spine::after{
+    content:""; position:absolute; left:16px; top:0; bottom:0; width:1px;
+    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.35) 0 6px, transparent 6px 16px);
+  }
+  @media(max-width:780px){ .spine{ display:none; } }
+
+  header.top{
+    position:sticky; top:0; z-index:4;
+    background:rgba(250,246,236,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--line);
+    transition: box-shadow 0.3s ease;
+  }
+  header.top.scrolled{ box-shadow:0 6px 18px rgba(15,54,50,0.08); }
+  .navrow{
+    max-width:1080px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  @media(max-width:600px){ .navrow{ padding:13px 20px; } }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem; letter-spacing:0.2px; transition:color 0.2s ease; }
+  .brand:hover{ color:var(--teal-deep); }
+  .brand span{ color:var(--teal); }
+  .navlinks{ display:flex; align-items:center; gap:22px; }
+  .navlinks a.back{ font-size:0.9rem; font-weight:600; color:var(--ink-soft); transition:color 0.2s ease; }
+  .navlinks a.back:hover{ color:var(--teal-deep); }
+  .navcta{
+    background:var(--teal); color:#fff; padding:9px 18px; border-radius:var(--radius);
+    font-weight:600; font-size:0.88rem; border:1px solid var(--teal-deep);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .navcta:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(15,54,50,0.18); }
+
+  /* ===== library hero ===== */
+  .libhero{ padding:70px 0 40px; }
+  .eyebrow{
+    display:inline-block; font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal-deep); font-weight:600; margin-bottom:18px;
+    border-bottom:2px solid var(--amber); padding-bottom:4px;
+  }
+  .libhero h1{ font-size:clamp(1.9rem, 5vw, 2.7rem); line-height:1.16; max-width:680px; }
+  .libhero p{ margin-top:16px; color:var(--ink-soft); max-width:560px; font-size:clamp(1rem, 2.6vw, 1.05rem); }
+
+  /* ===== search ===== */
+  .search-panel{ margin-top:34px; width:100%; }
+  .search-box{
+    position:relative; max-width:560px; width:100%;
+  }
+  .search-box input{
+    width:100%; padding:15px 18px 15px 46px; border-radius:var(--radius);
+    border:1.5px solid var(--line); background:var(--paper-deep);
+    font-family:'Inter', sans-serif; font-size:1rem; color:var(--ink);
+    transition:border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .search-box input:focus{
+    outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(15,118,110,0.12);
+  }
+  .search-box svg{
+    position:absolute; left:16px; top:50%; transform:translateY(-50%);
+    width:18px; height:18px; stroke:var(--ink-soft);
+  }
+  .chips{ display:flex; flex-wrap:wrap; gap:9px; margin-top:20px; }
+  .chip{
+    padding:8px 15px; border-radius:20px; border:1.5px solid var(--line);
+    background:var(--paper); font-size:0.85rem; font-weight:600; color:var(--ink-soft);
+    cursor:pointer; transition:all 0.18s ease; user-select:none;
+  }
+  .chip:hover{ border-color:var(--teal); color:var(--teal-deep); }
+  .chip.active{ background:var(--teal); border-color:var(--teal-deep); color:#fff; }
+
+  .result-count{ margin-top:22px; font-size:clamp(0.82rem, 2.4vw, 0.88rem); color:var(--ink-soft); }
+  .result-count strong{ color:var(--ink); }
+
+  /* ===== grid ===== */
+  .lib-section{ padding:36px 0 90px; }
+  .notes-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:26px;
+  }
+  @media(max-width:900px){ .notes-grid{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:560px){ .notes-grid{ grid-template-columns:1fr; } }
+
+  .note-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; position:relative; overflow:hidden;
+    transition:transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+    animation:cardIn 0.4s ease both;
+  }
+  @keyframes cardIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+  .note-card::after{
+    content:""; position:absolute; top:0; right:0; width:0; height:0;
+    border-style:solid; border-width:0 0 0 0;
+    border-color:transparent var(--paper-deep) transparent transparent;
+    box-shadow:-2px 2px 4px rgba(0,0,0,0.08);
+    transition: border-width 0.2s ease;
+  }
+  @media(hover:hover){
+    .note-card:hover{ transform:translateY(-4px); box-shadow:0 10px 24px rgba(15,54,50,0.10); border-color:var(--teal); }
+    .note-card:hover::after{ border-width:0 0 22px 22px; }
+  }
+  .note-tag{
+    font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--teal-deep);
+    font-weight:700; margin-bottom:10px; display:block;
+  }
+  .note-card h3{ font-size:1.03rem; margin-bottom:8px; line-height:1.35; }
+  .note-card p{ font-size:0.87rem; color:var(--ink-soft); margin-bottom:14px; }
+  .note-card a.view{ font-size:0.85rem; font-weight:600; color:var(--teal); border-bottom:1px solid var(--teal); }
+  mark{ background:var(--amber-soft); color:var(--ink); border-radius:2px; padding:0 1px; }
+
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--ink-soft);
+    border:1.5px dashed var(--line); border-radius:var(--radius); margin-top:26px; display:none;
+  }
+  .empty-state h3{ font-size:1.2rem; margin-bottom:8px; color:var(--ink); }
+  .empty-state.show{ display:block; }
+
+  footer{
+    border-top:1px solid var(--line); padding:34px 0; text-align:center;
+    color:var(--ink-soft); font-size:0.85rem;
+  }
+  footer .hand{ font-size:1.1rem; color:var(--teal-deep); display:block; margin-bottom:6px; }
+
+  /* ===== responsive refinements ===== */
+  @media(max-width:600px){
+    .navrow{ padding:13px 20px; flex-wrap:wrap; gap:10px; }
+    .brand{ font-size:1rem; }
+    .navlinks{ gap:14px; }
+    .navlinks a.back{ font-size:0.82rem; }
+    .navcta{ padding:8px 13px; font-size:0.8rem; }
+    .libhero{ padding:44px 0 30px; }
+    .lib-section{ padding:26px 0 60px; }
+    .search-box input{ padding:13px 16px 13px 42px; font-size:0.95rem; }
+    .search-box svg{ left:14px; width:16px; height:16px; }
+    .chips{ gap:7px; }
+    .chip{ padding:7px 12px; font-size:0.8rem; }
+    .note-card{ padding:17px; }
+  }
+  @media(max-width:360px){
+    .navlinks a.back{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="spine" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="navrow">
+    <a href="https://www.instagram.com/medico.__.diaries/" target="_blank" rel="noopener" class="brand">Medico <span>Diaries</span></a>
+    <div class="navlinks">
+      <a href="/" class="back">← Back to home</a>
+      <a href="/#join" class="navcta">Join the group</a>
+    </div>
+  </div>
+</header>
+
+<section class="libhero">
+  <div class="wrap">
+    <span class="eyebrow">The full library, free</span>
+    <h1>Every free note, in one place.</h1>
+    <p>Search by topic, or filter by course. Everything here is free and complete, not a preview.</p>
+
+    <div class="search-panel">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="searchInput" placeholder="Search notes, e.g. cardiac cycle, NORCET, sterilisation..." autocomplete="off">
+      </div>
+      <div class="chips" id="chipRow">
+        <span class="chip active" data-filter="All">All</span>
+        <span class="chip" data-filter="Nursing">Nursing</span>
+        <span class="chip" data-filter="GNM">GNM</span>
+        <span class="chip" data-filter="ANM">ANM</span>
+        <span class="chip" data-filter="B.Pharma">B.Pharma</span>
+        <span class="chip" data-filter="OT">OT</span>
+        <span class="chip" data-filter="Lab Tech">Lab Tech</span>
+        <span class="chip" data-filter="Exam Prep">Exam Prep</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lib-section">
+  <div class="wrap">
+    <div class="result-count" id="resultCount"></div>
+    <div class="notes-grid" id="notesGrid"></div>
+    <div class="empty-state" id="emptyState">
+      <h3>No notes match that search</h3>
+      <p>Try a different keyword, or clear the filter above.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="hand">Written by students, for students.</span>
+  Medico Diaries
+</footer>
+
+<script>
+  const notes = [
+    { title: "Cardiac Cycle, Explained Visually", course: "Nursing", desc: "The full cycle broken into stages you can actually picture, not just memorise.", link: "#" },
+    { title: "Types of Shock", course: "Nursing", desc: "Every category, side by side, with the signs that tell them apart.", link: "#" },
+    { title: "Fluid and Electrolyte Balance", course: "Nursing", desc: "The topic everyone dreads, laid out so it finally clicks.", link: "#" },
+    { title: "Nursing Process, Step by Step", course: "Nursing", desc: "Assessment to evaluation, with real examples for each stage.", link: "#" },
+    { title: "Vital Signs Quick Reference", course: "Nursing", desc: "Normal ranges and red flags, on one page you'll keep coming back to.", link: "#" },
+    { title: "Community Health Nursing Basics", course: "GNM", desc: "Core concepts for your GNM community health paper, simplified.", link: "#" },
+    { title: "Maternal and Child Health Notes", course: "GNM", desc: "Antenatal to postnatal care, organised the way exams ask it.", link: "#" },
+    { title: "Psychiatric Nursing Overview", course: "GNM", desc: "Major disorders and nursing management, without the textbook clutter.", link: "#" },
+    { title: "Growth and Development Milestones", course: "ANM", desc: "Age wise milestones laid out for quick revision before exams.", link: "#" },
+    { title: "Immunisation Schedule, India", course: "ANM", desc: "The full national schedule with common exam traps flagged.", link: "#" },
+    { title: "Basic First Aid for ANM Practicals", course: "ANM", desc: "The exact steps examiners look for during your practical exam.", link: "#" },
+    { title: "High Alert Medications", course: "B.Pharma", desc: "The drugs that show up on every exam and every ward.", link: "#" },
+    { title: "Pharmacokinetics Made Simple", course: "B.Pharma", desc: "Absorption to excretion, explained without the dense jargon.", link: "#" },
+    { title: "Drug Interactions Cheat Sheet", course: "B.Pharma", desc: "The interactions that get asked most often, in one table.", link: "#" },
+    { title: "Sterilisation and OT Protocols", course: "OT", desc: "The sequence examiners actually ask about, step by step.", link: "#" },
+    { title: "OT Instrument Identification", course: "OT", desc: "Common instruments with images and their exact clinical use.", link: "#" },
+    { title: "Anaesthesia Basics for OT Techs", course: "OT", desc: "What every OT technician is expected to know before a case.", link: "#" },
+    { title: "Common Lab Values, Quick Reference", course: "Lab Tech", desc: "Normal ranges and red flags, on one page you'll keep coming back to.", link: "#" },
+    { title: "Blood Collection Technique Notes", course: "Lab Tech", desc: "Order of draw, common errors, and how to avoid them.", link: "#" },
+    { title: "Microbiology Staining Methods", course: "Lab Tech", desc: "Gram staining and more, with the steps examiners test on.", link: "#" },
+    { title: "NORCET Previous Pattern Practice Set", course: "Exam Prep", desc: "Twenty questions in the real exam format, with reasoning for each answer.", link: "#" },
+    { title: "AIIMS Nursing Officer Syllabus Breakdown", course: "Exam Prep", desc: "The full syllabus mapped to what actually gets asked.", link: "#" },
+    { title: "NORCET General Awareness Notes", course: "Exam Prep", desc: "The current affairs and general knowledge topics that repeat every year.", link: "#" },
+    { title: "AIIMS Previous Year Question Analysis", course: "Exam Prep", desc: "Which topics come back year after year, and how often.", link: "#" }
+  ];
+
+  const grid = document.getElementById('notesGrid');
+  const emptyState = document.getElementById('emptyState');
+  const resultCount = document.getElementById('resultCount');
+  const searchInput = document.getElementById('searchInput');
+  const chipRow = document.getElementById('chipRow');
+  let activeFilter = 'All';
+
+  function highlight(text, query){
+    if(!query) return text;
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('(' + escaped + ')', 'ig');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+  function render(){
+    const query = searchInput.value.trim().toLowerCase();
+    const filtered = notes.filter(n => {
+      const matchesFilter = activeFilter === 'All' || n.course === activeFilter;
+      const matchesQuery = !query || n.title.toLowerCase().includes(query) || n.course.toLowerCase().includes(query) || n.desc.toLowerCase().includes(query);
+      return matchesFilter && matchesQuery;
+    });
+
+    resultCount.innerHTML = 'Showing <strong>' + filtered.length + '</strong> of <strong>' + notes.length + '</strong> notes';
+
+    if(filtered.length === 0){
+      grid.innerHTML = '';
+      emptyState.classList.add('show');
+      return;
+    }
+    emptyState.classList.remove('show');
+
+    grid.innerHTML = filtered.map(n => `
+      <div class="note-card">
+        <span class="note-tag">${n.course}</span>
+        <h3>${highlight(n.title, query)}</h3>
+        <p>${highlight(n.desc, query)}</p>
+        <a class="view" href="${n.link}">View note →</a>
+      </div>
+    `).join('');
+  }
+
+  searchInput.addEventListener('input', render);
+
+  chipRow.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip');
+    if(!chip) return;
+    chipRow.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeFilter = chip.dataset.filter;
+    render();
+  });
+
+  const topbar = document.querySelector('header.top');
+  window.addEventListener('scroll', () => {
+    topbar.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive:true });
+
+  render();
+</script>
+
+</body>
+</html>
