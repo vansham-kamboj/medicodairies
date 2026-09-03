@@ -231,6 +231,10 @@
       <h3>No notes match that search</h3>
       <p>Try a different keyword, or clear the filter above.</p>
     </div>
+    <div style="margin-top: 40px; padding: 24px; background: rgba(15, 118, 110, 0.08); border: 1.5px dashed var(--teal); border-radius: var(--radius); text-align: center;">
+      <h3 style="color: var(--teal-deep); margin-bottom: 8px;">We are coming up with more and more notes!</h3>
+      <p style="color: var(--ink-soft);">We are constantly updating our library. Stay tuned for more notes.</p>
+    </div>
   </div>
 </section>
 
@@ -241,30 +245,15 @@
 
 <script>
   const notes = [
-    { title: "Cardiac Cycle, Explained Visually", course: "Nursing", desc: "The full cycle broken into stages you can actually picture, not just memorise.", link: "#" },
-    { title: "Types of Shock", course: "Nursing", desc: "Every category, side by side, with the signs that tell them apart.", link: "#" },
-    { title: "Fluid and Electrolyte Balance", course: "Nursing", desc: "The topic everyone dreads, laid out so it finally clicks.", link: "#" },
-    { title: "Nursing Process, Step by Step", course: "Nursing", desc: "Assessment to evaluation, with real examples for each stage.", link: "#" },
-    { title: "Vital Signs Quick Reference", course: "Nursing", desc: "Normal ranges and red flags, on one page you'll keep coming back to.", link: "#" },
-    { title: "Community Health Nursing Basics", course: "GNM", desc: "Core concepts for your GNM community health paper, simplified.", link: "#" },
-    { title: "Maternal and Child Health Notes", course: "GNM", desc: "Antenatal to postnatal care, organised the way exams ask it.", link: "#" },
-    { title: "Psychiatric Nursing Overview", course: "GNM", desc: "Major disorders and nursing management, without the textbook clutter.", link: "#" },
-    { title: "Growth and Development Milestones", course: "ANM", desc: "Age wise milestones laid out for quick revision before exams.", link: "#" },
-    { title: "Immunisation Schedule, India", course: "ANM", desc: "The full national schedule with common exam traps flagged.", link: "#" },
-    { title: "Basic First Aid for ANM Practicals", course: "ANM", desc: "The exact steps examiners look for during your practical exam.", link: "#" },
-    { title: "High Alert Medications", course: "B.Pharma", desc: "The drugs that show up on every exam and every ward.", link: "#" },
-    { title: "Pharmacokinetics Made Simple", course: "B.Pharma", desc: "Absorption to excretion, explained without the dense jargon.", link: "#" },
-    { title: "Drug Interactions Cheat Sheet", course: "B.Pharma", desc: "The interactions that get asked most often, in one table.", link: "#" },
-    { title: "Sterilisation and OT Protocols", course: "OT", desc: "The sequence examiners actually ask about, step by step.", link: "#" },
-    { title: "OT Instrument Identification", course: "OT", desc: "Common instruments with images and their exact clinical use.", link: "#" },
-    { title: "Anaesthesia Basics for OT Techs", course: "OT", desc: "What every OT technician is expected to know before a case.", link: "#" },
-    { title: "Common Lab Values, Quick Reference", course: "Lab Tech", desc: "Normal ranges and red flags, on one page you'll keep coming back to.", link: "#" },
-    { title: "Blood Collection Technique Notes", course: "Lab Tech", desc: "Order of draw, common errors, and how to avoid them.", link: "#" },
-    { title: "Microbiology Staining Methods", course: "Lab Tech", desc: "Gram staining and more, with the steps examiners test on.", link: "#" },
-    { title: "NORCET Previous Pattern Practice Set", course: "Exam Prep", desc: "Twenty questions in the real exam format, with reasoning for each answer.", link: "#" },
-    { title: "AIIMS Nursing Officer Syllabus Breakdown", course: "Exam Prep", desc: "The full syllabus mapped to what actually gets asked.", link: "#" },
-    { title: "NORCET General Awareness Notes", course: "Exam Prep", desc: "The current affairs and general knowledge topics that repeat every year.", link: "#" },
-    { title: "AIIMS Previous Year Question Analysis", course: "Exam Prep", desc: "Which topics come back year after year, and how often.", link: "#" }
+    { title: "Drugs for Infertility", course: "B.Pharma", desc: "Detailed notes covering common drugs used for infertility treatment.", link: "https://drive.google.com/file/d/1CZVg-52eGNant9avCFjf5ihkuig-oBqz/view?usp=drive_link" },
+    { title: "Anatomy: Complete Nervous System", course: "Nursing", desc: "Comprehensive anatomy notes covering the entire nervous system.", link: "https://drive.google.com/file/d/1AXrVuZwXWAmbRwUIrTuhCeaP45_j73u6/view?usp=drive_link" },
+    { title: "Anatomy: Complete Skeleton System", course: "Nursing", desc: "Detailed breakdown of the human skeletal system for quick revision.", link: "https://drive.google.com/file/d/1kXDw449cEPC6cEF-H7hQBaDjln1hvtC5/view?usp=drive_link" },
+    { title: "Crash Cart Drugs", course: "Nursing", desc: "Essential crash cart medications, their uses, and dosages.", link: "https://drive.google.com/file/d/152X4n9zhzdwMQdbBGtymgrnnRIQidUdk/view?usp=drive_link" },
+    { title: "Drugs & Their Uses", course: "B.Pharma", desc: "A comprehensive guide to various drugs and their clinical applications.", link: "https://drive.google.com/file/d/1lSdmzpN-RxwhMSFE0Zg6IOV9vn9SsWE5/view?usp=drive_link" },
+    { title: "Ear and Eye Drugs", course: "B.Pharma", desc: "Notes on ophthalmic and otic medications.", link: "https://drive.google.com/file/d/1lSdmzpN-RxwhMSFE0Zg6IOV9vn9SsWE5/view?usp=drive_link" },
+    { title: "HIV / AIDS", course: "Nursing", desc: "Important notes on HIV, transmission, and management.", link: "https://drive.google.com/file/d/12Q36HUxCcevcrnCBSR_vcd1oonDliOV6/view?usp=drive_link" },
+    { title: "Important Injection Drugs", course: "Nursing", desc: "Key injectable medications, routes, and precautions.", link: "https://drive.google.com/file/d/1JDH61g9k0BIbuLLBLG2lCnDl0mnOlIbo/view?usp=drive_link" },
+    { title: "OBG Drugs", course: "Nursing", desc: "Crucial drugs used in Obstetrics and Gynaecology.", link: "https://drive.google.com/file/d/1sEikKze3vjeIjJcknQxmZKYu1p3B5y1j/view?usp=drive_link" }
   ];
 
   const grid = document.getElementById('notesGrid');
@@ -303,7 +292,7 @@
         <span class="note-tag">${n.course}</span>
         <h3>${highlight(n.title, query)}</h3>
         <p>${highlight(n.desc, query)}</p>
-        <a class="view" href="${n.link}">View note →</a>
+        <a class="view" href="${n.link}" target="_blank">View note →</a>
       </div>
     `).join('');
   }
